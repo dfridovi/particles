@@ -1,0 +1,58 @@
+# SSH authorization so that travis can push documentation to the repository.
+env:
+  global:
+    secure: "ZOs1xMaKg1OZk+MxCKGiEbnIrTFov12CPAdz6WNmATJnhMM2NpYI+1kT96CTShsrwiIZ1cCk2UJSv00FH3CeWyULv5wSAmCaV0yxekW/C7uGysiuHrhmjoEofNdGhidBDUt0NRpfirJdfR3FtrB9r1AgmOZWrKHfYOxg28rbrLXSm/EAKUJIdv1PEEtHk+Ty/yFz3b2iWfsGB4Lh/uU4fbbJCt1wyEzyrXLUa08CdG/TPNtcM5Dt4yK/O3n5L6lFjMCbgVVG8W0EW4a1AFLAou6HSXwi0TTI6qp+P9HcwZ1NQbN0NK7RNPPVdQ0d2ie5XMAb3wiCJ6w4x2p5ZglKLDZGsolSO4wBICIONL9HJN6urhXjgpZYki0VM28QOc7HjcAc9pBt7JXHUzJ218h8H7x/ad/jfPF9OXQUlfPVZgID8bQQ58ZxzKrUQFiZzFvWJmJv9WKbaHvrOQA+bqr625X4TgrGBX7TL50uYKSCGq25dRvKkVMzNuHDzjWq6vq/I3t5Ex+GYBduFDwW2ZsE1r+V4N0eF+6W3YA21OfvrYpw3WfO8DXyYeQBAJgsYhfiXDkd4o1FIWNOhhaJ61A1C+gjK0VmD+AVs/FZPeHbqIEzURw+sKXc41xKy+VaHhhJNAZm1aC4qvbaG05ZtjB1CqSyJ7QjQ/PDtCtSGBdeMes="
+
+language: cpp
+
+compiler:
+  - gcc
+  #- clang
+
+os:
+  - linux
+
+dist:
+  - trusty
+
+branches:
+  only:
+    - master
+
+notifications:
+  email: false
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq; fi
+
+install:
+  - echo $TRAVIS_OS_NAME
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -qq g++-5; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install --yes build-essential
+    doxygen libeigen3-dev libgflags-dev libgoogle-glog-dev cmake libboost-all-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install python-software-properties; fi
+
+before_script:
+  # Configure and make.
+  - mkdir bin
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_BUILD_TYPE=Release ..
+
+script:
+  - make
+  - ./run_tests
+
+after_success:
+  - make documentation
+
+deploy:
+  verbose: true
+  provider: pages
+  skip-cleanup: true
+  github-token: $PA_TOKEN
+  keep-history: true
+  on:
+    branch: master
