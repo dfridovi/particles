@@ -12,6 +12,9 @@ compiler:
 os:
   - linux
 
+dist:
+  - trusty
+
 branches:
   only:
     - master

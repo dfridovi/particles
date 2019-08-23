@@ -1,9 +1,9 @@
-# Dumbo
+# Particles
 [![Build Status](https://travis-ci.org/dfridovi/dumbo.svg?branch=master)](https://travis-ci.org/dfridovi/particles)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](LICENSE)
 
 ## Why *particles*?
-*particles* is a lightweight, quick-and-dirty C++ library for particle filtering. It should be easy to use and efficient to customize.
+*Particles* is a lightweight, quick-and-dirty C++ library for particle filtering. It should be easy to use and efficient to customize.
 
 ## Overview
 This repository is entirely written in C++, and is structured around the `cmake` cross-compilation paradigm.
