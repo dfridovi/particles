@@ -41,14 +41,29 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <particles/junk.h>
-#include <particles/utils/types.h>
-#include <iostream>
+#ifndef PARTICLES_JUNK_H
+#define PARTICLES_JUNK_H
 
+#include <math.h>
+#include <algorithm>
+#include <chrono>
+#include <functional>
+#include <iostream>
+#include <limits>
+#include <memory>
+#include <random>
+#include <string>
+#include <unordered_map>
 #include <vector>
+
+#include <Eigen/Dense>
+#include <Eigen/Geometry>
+#include <Eigen/StdVector>
 
 namespace particles {
 
-// void HelloWorld() { std::cout << "delete me!" << std::endl; }
+// void HelloWorld();
 
 }  // namespace particles
+
+#endif

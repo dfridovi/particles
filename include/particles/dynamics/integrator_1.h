@@ -49,6 +49,13 @@
 
 namespace particles {
 
+// Dynamics, Measurement maps:
+// x(t+1) = A*x(t) + B*u(t) + w(t);
+// y(t) = C*x(t) + v(t);
+// A = [0, 1; 0, 0]; B = [0; 1]; C = [1, 0; 0, 1];
+// mu_W = [0; 0], Sigma_W = [0.1, 0; 0; 0.1]; mu_V = [0; 0], Sigma_V = [0.2, 0;
+// 0, 0.2];
+
 // void HelloWorld() { std::cout << "delete me!" << std::endl; }
 
 }  // namespace particles
