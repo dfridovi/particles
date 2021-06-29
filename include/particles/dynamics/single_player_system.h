@@ -41,32 +41,33 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef PARTICLES_JUNK_H
-#define PARTICLES_JUNK_H
-
-#include <math.h>
-#include <algorithm>
-#include <chrono>
-#include <functional>
+#include <particles/junk.h>
+#include <particles/utils/types.h>
 #include <iostream>
-#include <limits>
-#include <memory>
-#include <random>
-#include <string>
-#include <unordered_map>
-#include <vector>
 
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
-#include <Eigen/StdVector>
+#include <vector>
 
 namespace particles {
 
-using Eigen::MatrixXf;
-using Eigen::VectorXf;
+// Dynamics, Measurement maps:
+// x(t+1) = A*x(t) + B*u(t) + w(t);
+// y(t) = C*x(t) + v(t);
+// A = [0, 1; 0, 0]; B = [0; 1]; C = [1, 0; 0, 1];
+// mu_W = [0; 0], Sigma_W = [0.1, 0; 0; 0.1]; mu_V = [0; 0], Sigma_V = [0.2, 0;
+// 0, 0.2];
 
-// void HelloWorld();
+// Compute next state
+
+VectorXf EvaluateNextState(Time t, const MatrixXf& A, const VectorXf& x,
+                           const MatrixXf& B,
+                           const std::vector<VectorXf>& u) const;
+
+// Compute current measurement
+
+VectorXf EvaluateMeasurement(Time t, const MatrixXf& A, const VectorXf& x,
+                             const MatrixXf& B,
+                             const std::vector<VectorXf>& u) const;
+
+// void HelloWorld() { std::cout << "delete me!" << std::endl; }
 
 }  // namespace particles
-
-#endif
