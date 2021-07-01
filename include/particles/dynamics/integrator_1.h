@@ -47,7 +47,15 @@
 
 #include <vector>
 
+#include <particles/dynamics/dynamical_system.h>
+
 namespace particles {
+
+class Integrator1 : public DynamicalSystem {
+  // To create: constructor, etc.
+}
+
+}
 
 // Dynamics, Measurement maps:
 // x(t+1) = A*x(t) + B*u(t) + w(t);

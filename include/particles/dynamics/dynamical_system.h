@@ -49,25 +49,21 @@
 
 namespace particles {
 
-// Dynamics, Measurement maps:
-// x(t+1) = A*x(t) + B*u(t) + w(t);
-// y(t) = C*x(t) + v(t);
-// A = [0, 1; 0, 0]; B = [0; 1]; C = [1, 0; 0, 1];
-// mu_W = [0; 0], Sigma_W = [0.1, 0; 0; 0.1]; mu_V = [0; 0], Sigma_V = [0.2, 0;
-// 0, 0.2];
+class DynamicalSystem {
+ public:
+  virtual ~DynamialSystem() {}
 
-// Compute next state
+  // Compute next state
+  virtual VectorXf EvaluateNextState(Time t, const MatrixXf& A,
+                                     const VectorXf& x, const MatrixXf& B,
+                                     const std::vector<VectorXf>& u) const;
 
-VectorXf EvaluateNextState(Time t, const MatrixXf& A, const VectorXf& x,
-                           const MatrixXf& B,
-                           const std::vector<VectorXf>& u) const;
+  // Compute current measurement
 
-// Compute current measurement
+  virtual VectorXf EvaluateMeasurement(Time t, const MatrixXf& A,
+                                       const VectorXf& x, const MatrixXf& B,
+                                       const std::vector<VectorXf>& u) const;
 
-VectorXf EvaluateMeasurement(Time t, const MatrixXf& A, const VectorXf& x,
-                             const MatrixXf& B,
-                             const std::vector<VectorXf>& u) const;
-
-// void HelloWorld() { std::cout << "delete me!" << std::endl; }
+  // void HelloWorld() { std::cout << "delete me!" << std::endl; }
 
 }  // namespace particles
