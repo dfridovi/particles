@@ -48,6 +48,7 @@
 #include <particles/utils/types.h>
 #include <cmath>
 #include <iostream>
+#include <random>
 
 #include <vector>
 
@@ -77,13 +78,38 @@ class Integrator1 : public LinearDynamicalSystem {
       int t, const VectorXf& x, const MatrixXf& B,
       const std::vector<VectorXf>& u) const {
     // To do: Add noise
+    // Use Eigen::EigenMultivariateNormal
 
-    return A * x + B * u
+    static const VectorXf mean_zero_dym = MatrixXf::Zero(xdim_);
+
+    Eigen::EigenMultivariateNormal<float> multivariate_normal_generator(
+        mean_zero_dym, dynamics_covar_);
+
+    MatrixXf w;
+    w << multivariate_normal_generator.samples(1);
+
+    return A * x + B * u + w
+  }
+
+  inline VectorXf Integrator1::EvaluateMeasurement(int t, const VectorXf& x,
+                                                   const MatrixXf& C) const {
+    // To do: Add noise
+    // Use Eigen::EigenMultivariateNormal
+
+    static const VectorXf mean_zero_meas = MatrixXf::Zero(xdim_);
+
+    Eigen::EigenMultivariateNormal<float> multivariate_normal_generator(
+        mean_zero_meas, measurement_covar_);
+
+    MatrixXf v;
+    v << multivariate_normal_generator.samples(1);
+
+    return C * x + v
   }
 
   // To create: constructor, etc.
 }
 
-}
+}  // namespace particles
 
 #endif
