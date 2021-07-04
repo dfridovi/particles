@@ -41,49 +41,44 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef PARTICLES_DYNAMICS_INTEGRATOR_1
-#define PARTICLES_DYNAMICS_INTEGRATOR_1
+#ifndef PARTICLES_DYNAMICS_LINEAR_DYNAMICAL_SYSTEM
+#define PARTICLES_DYNAMICS_LINEAR_DYNAMICAL_SYSTEM
 
 #include <particles/junk.h>
 #include <particles/utils/types.h>
-#include <cmath>
 #include <iostream>
 
 #include <vector>
 
-#include <particles/dynamics/linear_dynamical_system.h>
-
-// Dynamics, Measurement maps:
-// x(t+1) = A*x(t) + B*u(t) + w(t);
-// y(t) = C*x(t) + v(t);
-// A = [0, 1; 0, 0]; B = [0; 1]; C = [1, 0; 0, 1];
-// mu_W = [0; 0], Sigma_W = [0.1, 0; 0; 0.1]; mu_V = [0; 0], Sigma_V = [0.2, 0;
-// 0, 0.2];
-
-// void HelloWorld() { std::cout << "delete me!" << std::endl; }
-
-}  // namespace particles
-
 namespace particles {
 
-class Integrator1 : public LinearDynamicalSystem {
+class LinearDynamicalSystem : public DynamicalSystem {
  public:
-  ~Integrator1() {}
+  virtual ~LinearDynamicalSystem() {}
 
-  Integrator1(const MatrixXf& A, const MatrixXf& B)
-      : LinearDynamicalSystem(kNumXDims, kNumUDims) {}
+  // Compute next state
+  virtual VectorXf EvaluateNextState(int t, const MatrixXf& A,
+                                     const VectorXf& x, const MatrixXf& B,
+                                     const std::vector<VectorXf>& u) const = 0;
 
-  inline VectorXf Integrator1::EvaluateNextState(
-      int t, const VectorXf& x, const MatrixXf& B,
-      const std::vector<VectorXf>& u) const {
-    // To do: Add noise
+  // Compute current measurement
 
-    return A * x + B * u
-  }
+  virtual VectorXf EvaluateMeasurement(int t, const VectorXf& x,
+                                       const MatrixXf& C) const = 0;
 
-  // To create: constructor, etc.
-}
+ protected:
+  LinearDynamicalSystem(const MatrixXf& A, const MatrixXf& B, const MatrixXf& C)
+      : DynamicalSystem(const int xdim, const int udim,
+                        const MatrixXf dynamics_covar,
+                        const MatrixXf measurement_covar),
+        A_(A),
+        B_(B),
+        C_(C) {}
 
-}
+  const MatrixXf A_;
+  const MatrixXf B_;
+  const MatrixXf C_;
+
+}  // namespace particles
 
 #endif
